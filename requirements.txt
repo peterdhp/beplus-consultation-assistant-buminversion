@@ -8,5 +8,4 @@ langchain-core
 langchain-openai
 datetime
 openai
-ffmpeg-python
-ffprobe-python
+pydub
