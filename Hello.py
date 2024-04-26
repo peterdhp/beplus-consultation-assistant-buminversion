@@ -253,6 +253,7 @@ timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 client = OpenAI()
 if len(audio)>0.1:
+    st.audio(audio.export().read())  
     with st.spinner('음성 녹음을 받아적고 있습니다...'):
         asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",file= NamedBytesIO(audio.export().read(), name="audio.wav"))
     st.session_state.transcript += '\n'+ asr_result.text       
