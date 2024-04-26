@@ -9,4 +9,4 @@ langchain-openai
 datetime
 openai
 ffmpeg-python
-ffprobe
+ffprobe-python
