@@ -5,6 +5,9 @@ from langchain_core.output_parsers import StrOutputParser
 import io
 import datetime
 from audiorecorder import audiorecorder
+from pydub import AudioSegment
+AudioSegment.converter = "/usr/bin/ffmpeg"
+AudioSegment.ffprobe   = "/usr/bin/ffprobe"
 
 
 from openai import OpenAI
