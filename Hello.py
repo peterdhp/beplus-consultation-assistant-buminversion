@@ -214,7 +214,7 @@ def medical_advisor(medical_record, transcript):
     prompt_template = """Let's say you are a medical school professor.
 Given a transcript of a patient consultation and a complete medical record written, give medical feedback to the doctor in Korean.
 ONLY give feedback that could be critical to the patient, you don't have to say anything if nothing is critical.
-Be as brief as possible.
+Be as brief and clear as possible, no longer than 50 Korean characters.
 
 [transcript]
 {transcript}
