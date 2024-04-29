@@ -262,10 +262,8 @@ if len(st.session_state.audio)>0.1:
     with st.spinner('음성 녹음을 받아적고 있습니다...'):
         asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="Beware that the conversation is a medical encounter with a patient and doctor.",file= NamedBytesIO(st.session_state.audio.export().read(), name="audio.wav"))
     st.session_state.transcript += '\n'+ asr_result.text 
-    update_text()
-    st.rerun()      
 #st.text_area("진료 음성기록", key='transcript')
-#st.button('✍🏻 진료기록 자동 완성 ',on_click=update_text)
+st.button('✍🏻 진료기록 자동 완성 ',on_click=update_text)
 st.button('✅ impression list 및 진료 내용 검토',on_click=update_text_advise)
 st.button('🔄 새로운 환자',on_click=refresh,key='refreshbutton')
    
