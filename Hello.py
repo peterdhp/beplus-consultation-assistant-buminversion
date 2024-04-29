@@ -55,8 +55,7 @@ def refresh():
     st.session_state.format_type = '기본'
     st.session_state.transcript =''
     st.session_state.temp_medical_record ="[현병력]\n\n[ROS]\n\n[신체검진]"
-    st.session_state.audio = None
-    st.session_state.audio_player = None
+    st.session_state.recordings = None
     player_field.empty()
 
 
@@ -251,7 +250,7 @@ st.selectbox("진료기록 양식", options=['없음', '기본', '어깨통증']
 
 st.text_area('진료 기록', value="[현병력]\n\n[ROS]\n\n[신체검진]", height=600, key='temp_medical_record')
 
-st.session_state.audio = audiorecorder(start_prompt="진료 녹음하기 🔴", stop_prompt="진료 녹음 끝내기 🟥", pause_prompt="", key='recordings')
+audiorecorder(start_prompt="진료 녹음하기 🔴", stop_prompt="진료 녹음 끝내기 🟥", pause_prompt="", key='recordings')
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 #byte_io = io.BytesIO()
@@ -261,12 +260,12 @@ st.write(st.session_state)
 
 
 client = OpenAI()
-if st.session_state.audio and len(st.session_state.audio)>0.1:
-    player_field = st.audio(st.session_state.audio.export().read())  
+if st.session_state.recordings and len(st.session_state.recordings)>0.1:
+    player_field = st.audio(st.session_state.recordings.export().read())  
     with st.spinner('음성 녹음을 받아적고 있습니다...'):
-        asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="이것은 의사와 환자의 진료 중 나눈 대화를 녹음한 것입니다.",file= NamedBytesIO(st.session_state.audio.export().read(), name="audio.wav"))
+        asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="이것은 의사와 환자의 진료 중 나눈 대화를 녹음한 것입니다.",file= NamedBytesIO(st.session_state.recordings.export().read(), name="audio.wav"))
     st.session_state.transcript += '\n'+ asr_result.text 
-    st.session_state.audio = None
+    st.session_state.recordings = None
 #st.text_area("진료 음성기록", key='transcript')
 st.button('✍🏻 진료기록 자동 완성 ',on_click=update_text)
 st.button('✅ impression list 및 진료 내용 검토',on_click=advise)
