@@ -245,6 +245,6 @@ with st.sidebar:
     st.subheader("5.새로고침")
     st.markdown("`새로운 환자`을 눌러 이전 진료기록을 지운다.")
     
-    st.button("음성녹음 Demo",on_click=recorddemo)
+    #st.button("음성녹음 Demo",on_click=recorddemo)
     #st.button("자동작성완료 Demo",on_click=completedemo)
     #st.session_state
