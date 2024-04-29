@@ -13,8 +13,6 @@ from openai import OpenAI
 
 openai_api_key = st.secrets["OPENAI_API_KEY"]
 
-if 'audio_run' not in st.session_state:
-    st.session_state.audio_run = False
 
 if 'transcript' not in st.session_state:
     st.session_state.transcript =''
@@ -259,7 +257,7 @@ timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 #byte_io = io.BytesIO()
 #audio.export(byte_io, format='mp3')
 #byte_io.seek(0)
-
+st.sidebar(st.write(st.session_state))
 
 
 client = OpenAI()
@@ -278,7 +276,7 @@ st.button('🔄 새로운 환자',on_click=refresh,key='refreshbutton')
 
 
 with st.sidebar:
-    st.write(st.session_state)
+    
     st.image('logo.png', caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
     st.title("진료 도우미 (BETA ver.)")
     st.header("사용설명서")
