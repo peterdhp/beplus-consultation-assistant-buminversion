@@ -257,7 +257,7 @@ timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 #byte_io = io.BytesIO()
 #audio.export(byte_io, format='mp3')
 #byte_io.seek(0)
-st.sidebar(st.write(st.session_state))
+st.sidebar.st.write(st.session_state)
 
 
 client = OpenAI()
