@@ -169,7 +169,7 @@ def medical_advisor(medical_record, transcript):
     prompt_template = """Let's say you are a medical school professor.
 Given a transcript of a patient consultation and a complete medical record written, 
 Give a list of impression in the format below :
-#진단명은 영어로해줘. 예상 되는 진단 5개를 알려주고 왜 그렇게 생각했는지와 해야할 검사들을 알려줘. 진단을 할 때 특별히 유의할 점도 정리해줘
+[진단] #진단명은 영어로해줘. 예상 되는 진단 5개를 알려주고 왜 그렇게 생각했는지와 해야할 검사들을 알려줘. 진단을 할 때 특별히 유의할 점도 정리해줘
 R/O peptic ulcer(복부 통증이 있고, 어지러움을 느낌, 확인을 위해 위내시경을 시행)
 DDx1. reflux esophagitis(식사를 하고 나서 악화됨, 위내시경 시행)
 DDx2. gastric cancer (3개월전부터 호소, 위내시경 시행)
