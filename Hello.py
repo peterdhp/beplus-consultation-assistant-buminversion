@@ -257,7 +257,7 @@ client = OpenAI()
 if len(st.session_state.audio)>0.1:
     st.audio(st.session_state.audio.export().read())  
     with st.spinner('음성 녹음을 받아적고 있습니다...'):
-        asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="Beware that the conversation is a medical encounter with a patient and doctor.",file= NamedBytesIO(audio.export().read(), name="audio.wav"))
+        asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="Beware that the conversation is a medical encounter with a patient and doctor.",file= NamedBytesIO(st.session_state.audio.export().read(), name="audio.wav"))
     st.session_state.transcript += '\n'+ asr_result.text 
     update_text()
     st.rerun()      
