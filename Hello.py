@@ -185,7 +185,7 @@ def format_retriever(format_type):
     format_lib ={}
     
     format_lib["없음"] = ""
-    format_lib["기본"] = "[현병력]\n\n[ROS]\n\n[신체검진]\n\n[impression]"
+    format_lib["기본"] = "[현병력]\n\n[ROS]\n\n[신체검진]"
     format_lib["어깨통증"] = """[현병력]
     
 [ROS]
@@ -196,8 +196,7 @@ Lt. abduction/adduction = 150/30
 Rt. abduction/adduction = 150/30
 Lt. extension/flexion = 50/150
 Rt. extension/flexion = 50/150
-
-[impression]"""
+"""
     
     output = format_lib.get(format_type)
     
@@ -249,7 +248,7 @@ class NamedBytesIO(io.BytesIO):
 
 st.selectbox("진료기록 양식", options=['없음', '기본', '어깨통증'],index=1,on_change=call_format, key='format_type')
 
-st.text_area('진료 기록', value="[현병력]\n\n[ROS]\n\n[신체검진]\n\n[Impression]", height=600, key='temp_medical_record')
+st.text_area('진료 기록', value="[현병력]\n\n[ROS]\n\n[신체검진]", height=600, key='temp_medical_record')
 
 st.session_state.audio = audiorecorder(start_prompt="진료 녹음하기 🔴", stop_prompt="진료 녹음 끝내기 🟥", pause_prompt="", key=None)
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
