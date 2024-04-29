@@ -12,6 +12,10 @@ from openai import OpenAI
 
 
 openai_api_key = st.secrets["OPENAI_API_KEY"]
+
+if 'audio_run' not in st.session_state:
+    st.session_state.audio_run = False
+
 if 'transcript' not in st.session_state:
     st.session_state.transcript =''
 
@@ -104,7 +108,7 @@ def medical_record_voicecomplete():
     
     
     prompt_template = """Given a transcript of a patient consultation and a incomplete medical record, complete and edit the medical record. 
-Only complete or edit the medical record based on the information given. For the physical examination KEEP THE FORMAT and only change what is necessary, no need to explain the changes.
+Complete or edit the medical record based ONLY on the information given. For the physical examination KEEP THE FORMAT and only change what is necessary.
 DON'T give the impression list. After the medical record, write the list of things the doctor explained to the patient.
 
 [transcript]
@@ -260,11 +264,12 @@ client = OpenAI()
 if len(st.session_state.audio)>0.1:
     st.audio(st.session_state.audio.export().read())  
     with st.spinner('음성 녹음을 받아적고 있습니다...'):
-        asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="Beware that the conversation is a medical encounter with a patient and doctor.",file= NamedBytesIO(st.session_state.audio.export().read(), name="audio.wav"))
+        asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="이것은 의사와 환자의 진료 중 나눈 대화를 녹음한 것입니다.",file= NamedBytesIO(st.session_state.audio.export().read(), name="audio.wav"))
     st.session_state.transcript += '\n'+ asr_result.text 
+    st.session_state.audio = None
 #st.text_area("진료 음성기록", key='transcript')
 st.button('✍🏻 진료기록 자동 완성 ',on_click=update_text)
-st.button('✅ impression list 및 진료 내용 검토',on_click=update_text_advise)
+st.button('✅ impression list 및 진료 내용 검토',on_click=advise)
 st.button('🔄 새로운 환자',on_click=refresh,key='refreshbutton')
    
 #encoded_image = base64.b64encode(open("logo.png", "rb").read()).decode()
@@ -279,7 +284,7 @@ with st.sidebar:
     st.subheader("2.진료내용 녹음하기")
     st.markdown("`진료 녹음하기 🔴`을 눌러주고 진료를 진행한다. (진료가 시작되기 최소 3초전에는 녹음을 시작하는 것을 추천드립니다.)")
     st.subheader("3.진료 음성기록 변환하기")
-    st.markdown("진료가 끝나면 `진료 녹음 끝내기 🟥`을 누르고 `진료 음성기록`이 완성되기를 기다린다. (잘못 기록한 의학 용어 등이 있을 경우 바로 수정 가능)")
+    st.markdown("진료가 끝나면 `진료 녹음 끝내기 🟥`을 누르고 `진료 음성기록`이 완성되기를 기다린다.")
     st.subheader("4.진료기록 자동 완성하기")
     st.markdown("`✍🏻 진료기록 자동 완성 및 ✅ 진료 내용 검토`을 눌러 진료기록이 완성되고 검토되기를 기다린다.")
     st.subheader("5.새로고침")
