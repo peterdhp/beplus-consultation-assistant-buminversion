@@ -35,8 +35,9 @@ def refresh():
 def medical_record(transcript):
     """문진 내용을 기반으로 질문을 함"""
     
-    prompt_template = """Given the transcript, write a semi-filled medical report of the patient. Only fill in the form based on the transcript. Also after the medical record, write the list of things the doctor explained to the patient in Korean.
-                
+    prompt_template = """Given the transcript, write a semi-filled medical report of the patient. Only fill in the form based on the transcript. 
+After the medical record, give the list of things that the doctor explained to the patient during the consulaltation.
+Use Korean.
 [transcript]
 {transcript}
 
@@ -82,7 +83,8 @@ def medical_record_voicecomplete():
     
     prompt_template = """Given a transcript of a patient consultation and a incomplete medical record, complete and edit the medical record. 
 Complete or edit the medical record based ONLY on the information given. For the physical examination KEEP THE FORMAT and only change what is necessary.
-DON'T give the impression list. After the medical record, write the list of things the doctor explained to the patient in Korean.
+DON'T give the impression list. After the medical record, give the list of things that the doctor explained to the patient during the consulaltation.
+Use Korean.
 
 [transcript]
 {transcript}
@@ -130,7 +132,8 @@ def update_text_advise():
     st.success("진료 내용 검토 성공적으로 완료 되었습니다.")
  
 def recorddemo():
-    st.session_state.transcript = "아 선생님 제가 최근 며칠부터 너무 죽을 것 같아가지고요 어제는 오늘부터 막 토도 하고 지금 기운도 너무 없고 음식도 못먹겠고 지금 계속 토하고 배아프고 너무 힘들어요 그래요? 토하기 시작한건 언제부터인데요? 토한거는 어제 오후부터 막 속이 안좋더니 오늘부터는 막 계속 토하고 그래요 토를 몇번 하셨어요? 글쎄요 먹은것도 없이 계속 나와서 아 토하면 먹은게 아니라 그냥 음식같은것만 나와요? 네 그냥 먹은것도 없이 계속 마지막으로 식사하신건 언젠가요? 식사는 조금씩 했어요 조금씩 죽같은거 그냥 마지막으로 언제 식사했어요? 아침에도 죽을 먹어야겠다 싶어가지고 너무 지금 기운도 하나도 없고 밥도 힘들어요 설사는 안하셨구요? 설사는 그냥 병이 좀 있다 정도만 했었고 마지막으로 본건 언젠데요? 그건 어제인가 그젠가 배가 아프진 않으세요? 전체적으로 다? 배 아픈것도 그럼 어제부터 그러신거에요? 아 배는 요 근래부터 조금씩 조금씩 아프더니 어제부터 좀 더 아픈데 근래? 근래면 정확히 어느정도 됐을까요? 아 글쎄요 제가 요새 좀 컨디션이 안좋다 싶더니 막 갑자기 이게 심해지네요 요새가 어느정도 되셨어요? 아 글쎄요 한 이번주? 이번주? 그럼 한 일주일정도? 이번주 한 글쎄요 한 3-4일 됐을까? 3-4일? 그냥 제가 좀 몸살기운 나고 좀 기침하고 좀 감기기운이 있더니"
+    st.session_state.transcript = "오늘 어디 아파서 오셨어요? 선생님 제가 최근 며칠부터 너무 죽을 것 같아서요. 어제는 오늘부터 막 토도 하고 지금 기운도 너무 없고 음식도 못 먹겠고 지금 계속 토하고 배 아프고 너무 힘들어요. 그래요? 토하기 시작한 건 언제였어요? 토한 건 어제 오후부터 속이 안 좋더니 오늘부터는 계속 토하고 그래요. 토를 몇 번 하셨어요? 글쎄요. 먹은 것도 없이 계속 나왔어요. 토하면 먹은 게 아니라 그냥 우유 같은 거만 나오네요. 마지막으로 식사하신 건 언젠데요? 식사는 조금씩 했어요. 조금씩. 죽 같은 거 그냥. 마지막으로 언제 식사하셨어요? 아침에도 좀 줘 먹어야겠다 싶어서 너무 지금 기운도 하나도 없고 지금 너무 힘들어요. 설사는 하셨고요? 설사는 그냥 변이 좀 없다 정도만 했었고 마지막으로 본 건 언젠데요? 그건 어제인가 그젠가 배가 아프진 않으세요? 배가 아파요. 어디가 아파요? 배꼽 주변 다 전체적으로 아파요. 전체적으로 다? 배 아픈 것도 그럼 어제부터 그러신 거예요? 배는 요 근래부터 조금씩 조금씩 아프다니 어제 그제부터 좀 더 아파요. 근래? 근래면 정확히 어느 정도 됐을까요? 글쎄요. 제가 요새 좀 컨디션이 안 좋다 싶더니 갑자기 이게 심해지네요. 요새가 어느 정도 되셨어요? 글쎄요. 한 이번 주? 이번 주? 그럼 일주일 정도? 이번 주 한 글쎄요. 한 3-4일 됐을까? 3-4일? 그냥 제가 좀 몸살 기운 나고 좀 기침하고 좀 감기 기운이 있더니 컨디션이 확 너무 안 좋아지네요. 감기 기운이 있다가 안 좋아지셨어요? 네. 확 안 좋아지네요. 갑자기. 근데 변은 그냥 계속 묽게만 하고 네. 변은 그냥 섞여나오는 건 아니고요. 열은? 열은 그렇게 안 납니다. 열은 없고요. 원래 앓고 계시는 병 있으세요? 뭐 딱히 앓고 있는 병은 없어요. 그냥 가끔 정기적으로 먹는 약 같은 거? 제가 진통제는 좀 자주 먹어요. 허리가 너무 아파요. 허리가 아파요? 허리는 언제부터 그랬는데? 허리는 좀 술창이 됐죠. 얼마나? 몇 년 된 것 같아요. 몇 년? 그럼 진통제는 뭐 계속 먹어야 돼요? 아니면은 계속 먹어야 돼요. 진짜 계속 먹어야 돼요. 너무 아파서 그거 어디서 처방 받으신 거예요? 처음 봐서 먹죠. 진통제는 이름은 모르시죠? 이름은 잘 모르시고. 이름은 잘 모르시고. 처방은 어디서 받으세요? 동네 정형외과. 동네 정형외과. 아침에 너무 힘들어요. 선생님. 일단 네. 아침에 너무 힘들어요. 지금. 너무 기분도 없고. X-ray랑 혈액 검사를 좀 잠깐 하고 그리고 제가 좀 보도록 하겠습니다."
+
 def format_retriever(format_type):
     
     format_lib ={}
@@ -204,10 +207,7 @@ st.text_area('진료 기록', value="[현병력]\n\n[ROS]\n\n[신체검진]", he
 st.session_state.audio=audiorecorder(start_prompt="진료 녹음하기 🔴", stop_prompt="진료 녹음 끝내기 🟥", pause_prompt="", key='recordings')
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-#byte_io = io.BytesIO()
-#audio.export(byte_io, format='mp3')
-#byte_io.seek(0)
-st.write(st.session_state)
+#st.write(st.session_state)
 
 
 client = OpenAI()
@@ -227,7 +227,7 @@ st.button('🔄 새로운 환자',on_click=refresh,key='refreshbutton')
 
 
 with st.sidebar:
-    st.write(st.session_state)
+    #st.write(st.session_state)
     st.image('logo.png', caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
     st.title("진료 도우미 (BETA ver.)")
     st.header("사용설명서")
