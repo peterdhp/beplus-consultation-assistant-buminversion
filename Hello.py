@@ -279,7 +279,7 @@ st.button('🔄 새로운 환자',on_click=refresh,key='refreshbutton')
 
 
 with st.sidebar:
-    
+    st.write(st.session_state)
     st.image('logo.png', caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
     st.title("진료 도우미 (BETA ver.)")
     st.header("사용설명서")
