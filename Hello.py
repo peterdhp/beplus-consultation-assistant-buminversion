@@ -59,6 +59,8 @@ def refresh():
     st.session_state.temp_medical_record ="[현병력]\n\n[ROS]\n\n[신체검진]\n\n[impression]"
     st.session_state.audio = None
     st.session_state.audio_player = None
+    player_field.empty()
+
 
 def medical_record(transcript):
     """문진 내용을 기반으로 질문을 함"""
@@ -262,7 +264,7 @@ timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 client = OpenAI()
 if len(st.session_state.audio)>0.1:
-    st.audio(st.session_state.audio.export().read(),key='audio_player')  
+    player_field = st.audio(st.session_state.audio.export().read(),key='audio_player')  
     with st.spinner('음성 녹음을 받아적고 있습니다...'):
         asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="이것은 의사와 환자의 진료 중 나눈 대화를 녹음한 것입니다.",file= NamedBytesIO(st.session_state.audio.export().read(), name="audio.wav"))
     st.session_state.transcript += '\n'+ asr_result.text 
