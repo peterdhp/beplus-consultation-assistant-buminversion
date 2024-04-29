@@ -104,7 +104,7 @@ def medical_record_voicecomplete():
     
     
     prompt_template = """Given a transcript of a patient consultation and a incomplete medical record, complete and edit the medical record. 
-Only complete or edit the medical record based on the information given. For the physical examination KEEP THE FORMAT and only change what is necessary, also explain in Korean when changed.
+Only complete or edit the medical record based on the information given. For the physical examination KEEP THE FORMAT and only change what is necessary, no need to explain the changes.
 DON'T give the impression list. After the medical record, write the list of things the doctor explained to the patient.
 
 [transcript]
