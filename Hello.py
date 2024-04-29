@@ -62,7 +62,7 @@ def refresh():
 def medical_record(transcript):
     """문진 내용을 기반으로 질문을 함"""
     
-    prompt_template = """Given the transcript, write a semi-filled medical report of the patient. Only fill in the form based on the transcript. Also after the medical record, write the list of things the doctor explained to the patient.
+    prompt_template = """Given the transcript, write a semi-filled medical report of the patient. Only fill in the form based on the transcript. Also after the medical record, write the list of things the doctor explained to the patient in Korean.
                 
 [transcript]
 {transcript}
@@ -109,7 +109,7 @@ def medical_record_voicecomplete():
     
     prompt_template = """Given a transcript of a patient consultation and a incomplete medical record, complete and edit the medical record. 
 Complete or edit the medical record based ONLY on the information given. For the physical examination KEEP THE FORMAT and only change what is necessary.
-DON'T give the impression list. After the medical record, write the list of things the doctor explained to the patient.
+DON'T give the impression list. After the medical record, write the list of things the doctor explained to the patient in Korean.
 
 [transcript]
 {transcript}
