@@ -50,12 +50,12 @@ def refresh():
     st.session_state.format_type = '기본'
     st.session_state.transcript =''
     st.session_state.temp_medical_record ="[현병력]\n\n[ROS]\n\n[신체검진]\n\n[impression]"
-    audio = None
+    st.session_state.audio = None
 
 def medical_record(transcript):
     """문진 내용을 기반으로 질문을 함"""
     
-    prompt_template = """Given the transcript, write a semi-filled medical report of the patient. Only fill in the form based on the transcript. 
+    prompt_template = """Given the transcript, write a semi-filled medical report of the patient. Only fill in the form based on the transcript. Also after the medical record, write the list of things the doctor explained to the patient.
                 
 [transcript]
 {transcript}
@@ -75,13 +75,6 @@ The output(except the diagnosis) should be in Korean. Here is an example :
 V/S : 130/90, 88, 36.5도
 약물력 : 특이사항 없음
 가족력 : 모름
-    
-[진단] #진단명은 영어로해줘. 예상 되는 진단 5개를 알려주고 왜 그렇게 생각했는지와 해야할 검사들을 알려줘. 진단을 할 때 특별히 유의할 점도 정리해줘
-R/O peptic ulcer(복부 통증이 있고, 어지러움을 느낌, 확인을 위해 위내시경을 시행)
-DDx1. reflux esophagitis(식사를 하고 나서 악화됨, 위내시경 시행)
-DDx2. gastric cancer (3개월전부터 호소, 위내시경 시행)
-DDx3. functional dyspepsia (3개월전부터 호소, 경과관찰)
-DDx4. trauma (복부 통증, xray로 골절 확인)
 
 주의할 점 : 67세 남성으로 위암을 배제할 수 없으므로 건강검진 시행여부 확인
     
@@ -109,6 +102,7 @@ def medical_record_voicecomplete():
     
     prompt_template = """Given a transcript of a patient consultation and a incomplete medical record, complete and edit the medical record. 
 Only complete or edit the medical record based on the information given. For the physical examination KEEP THE FORMAT and only change what is necessary, also explain in Korean when changed.
+DON'T give the impression list. After the medical record, write the list of things the doctor explained to the patient.
 
 [transcript]
 {transcript}
@@ -212,8 +206,16 @@ def advise():
 
 def medical_advisor(medical_record, transcript):
     prompt_template = """Let's say you are a medical school professor.
-Given a transcript of a patient consultation and a complete medical record written, give medical feedback to the doctor in Korean.
-ONLY give feedback that could be critical to the patient, you don't have to say anything if nothing is critical.
+Given a transcript of a patient consultation and a complete medical record written, 
+Give a list of impression in the format below :
+#진단명은 영어로해줘. 예상 되는 진단 5개를 알려주고 왜 그렇게 생각했는지와 해야할 검사들을 알려줘. 진단을 할 때 특별히 유의할 점도 정리해줘
+R/O peptic ulcer(복부 통증이 있고, 어지러움을 느낌, 확인을 위해 위내시경을 시행)
+DDx1. reflux esophagitis(식사를 하고 나서 악화됨, 위내시경 시행)
+DDx2. gastric cancer (3개월전부터 호소, 위내시경 시행)
+DDx3. functional dyspepsia (3개월전부터 호소, 경과관찰)
+DDx4. trauma (복부 통증, xray로 골절 확인)
+
+Then give medical feedback to the doctor in Korean. ONLY give feedback that could be critical to the patient, you don't have to say anything if nothing is critical.
 Be as brief and clear as possible, no longer than 50 Korean characters.
 
 [transcript]
@@ -242,7 +244,7 @@ st.selectbox("진료기록 양식", options=['없음', '기본', '어깨통증']
 
 st.text_area('진료 기록', value="[현병력]\n\n[ROS]\n\n[신체검진]\n\n[Impression]", height=600, key='temp_medical_record')
 
-audio = audiorecorder(start_prompt="진료 녹음하기 🔴", stop_prompt="진료 녹음 끝내기 🟥", pause_prompt="", key=None)
+st.session_state.audio = audiorecorder(start_prompt="진료 녹음하기 🔴", stop_prompt="진료 녹음 끝내기 🟥", pause_prompt="", key=None)
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 #byte_io = io.BytesIO()
@@ -252,13 +254,14 @@ timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 client = OpenAI()
-if len(audio)>0.1:
-    st.audio(audio.export().read())  
+if len(st.session_state.audio)>0.1:
+    st.audio(st.session_state.audio.export().read())  
     with st.spinner('음성 녹음을 받아적고 있습니다...'):
-        asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",file= NamedBytesIO(audio.export().read(), name="audio.wav"))
+        asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="Beware that the conversation is a medical encounter with a patient and doctor.",file= NamedBytesIO(audio.export().read(), name="audio.wav"))
     st.session_state.transcript += '\n'+ asr_result.text       
 st.text_area("진료 음성기록", key='transcript')
-st.button('✍🏻 진료기록 자동 완성 및 ✅ 진료 내용 검토',on_click=update_text_advise)
+st.button('✍🏻 진료기록 자동 완성 ',on_click=update_text)
+st.button('✅ impression list 및 진료 내용 검토',on_click=update_text_advise)
 st.button('🔄 새로운 환자',on_click=refresh,key='refreshbutton')
    
 #encoded_image = base64.b64encode(open("logo.png", "rb").read()).decode()
