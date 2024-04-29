@@ -12,6 +12,9 @@ from openai import OpenAI
 
 
 openai_api_key = st.secrets["OPENAI_API_KEY"]
+if 'transcript' not in st.session_state:
+    st.session_state.transcript =''
+
 if "total_cost" not in st.session_state:
     st.session_state.totalcost = 0
 
