@@ -22,6 +22,8 @@ if 'transcript' not in st.session_state:
 if "total_cost" not in st.session_state:
     st.session_state.totalcost = 0
 
+player_field=None
+
 def refresh():
     st.session_state.totalcost = 0
     st.session_state.format_type = '기본'
@@ -29,7 +31,8 @@ def refresh():
     st.session_state.temp_medical_record ="[현병력]\n\n[ROS]"
     st.session_state.recordings = None
     st.session_state.transcript_status = False
-    player_field.empty()
+    if player_field is not None:
+        player_field.empty()
 
 
 def medical_record(transcript):
