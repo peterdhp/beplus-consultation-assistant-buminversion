@@ -224,6 +224,16 @@ if st.session_state.recordings and len(st.session_state.audio)>100:
             asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="이것은 의사와 환자의 진료 중 나눈 대화를 녹음한 것입니다.",file= NamedBytesIO(st.session_state.audio.export().read(), name="audio.wav"))
         st.session_state.transcript += '\n'+ asr_result.text 
         st.session_state.transcript_status = True
+        if st.session_state.format_type == '없음' and st.session_state.temp_medical_record == "":
+            with st.spinner('음성 녹음을 바탕으로 진료 기록을 완성하고 있습니다...'):
+                st.session_state.LLM_medrecord = medical_record(transcript=st.session_state.transcript)
+        else :    
+            chain = medical_record_voicecomplete()
+            with st.spinner('음성 녹음을 바탕으로 진료 기록을 완성하고 있습니다...'):
+                st.session_state.LLM_medrecord = chain.invoke({"transcript" : st.session_state.transcript, "incomplete_medrec" : st.session_state.temp_medical_record})
+        st.session_state.temp_medical_record = st.session_state.LLM_medrecord
+        st.experimental_rerun()
+
 #st.text_area("진료 음성기록", key='transcript')
 st.button('✍🏻 진료기록 자동 완성 ',on_click=update_text)
 st.button('✅ impression list 및 진료 내용 검토',on_click=advise)
