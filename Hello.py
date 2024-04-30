@@ -231,7 +231,7 @@ if st.session_state.recordings and len(st.session_state.audio)>100:
         
 
 #st.text_area("진료 음성기록", key='transcript')
-st.button('✍🏻 진료기록 자동 완성 ',on_click=update_text)
+#st.button('✍🏻 진료기록 자동 완성 ',on_click=update_text)
 st.button('✅ impression list 및 진료 내용 검토',on_click=advise)
 st.button('🔄 새로운 환자',on_click=refresh,key='refreshbutton')
    
