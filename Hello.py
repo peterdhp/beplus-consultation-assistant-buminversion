@@ -205,7 +205,7 @@ st.selectbox("진료기록 양식", options=['없음', '기본', '어깨통증']
 
 st.text_area('진료 기록', value="[현병력]\n\n[ROS]\n\n[신체검진]", height=600, key='temp_medical_record')
 
-st.session_state.audio=audiorecorder(start_prompt="진료 녹음하기 🔴", stop_prompt="진료 녹음 끝내기 🟥", pause_prompt="", key='recordings')
+st.session_state.audio=audiorecorder(start_prompt="", stop_prompt="", pause_prompt="", key='recordings')
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 #st.write(st.session_state)
