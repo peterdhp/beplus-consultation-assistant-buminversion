@@ -78,7 +78,7 @@ def medical_record_voicecomplete():
     prompt_template = """Given a transcript of a patient consultation and a incomplete medical record, complete and edit the medical record. 
 Complete or edit the medical record based ONLY on the information given. If you don't have enough information to complete the medical record, just leave it blank.
 For the physical examination KEEP THE FORMAT and only change what is necessary.
-DON'T give the impression list. After the medical record, give the list of things that the doctor explained to the patient during the consulaltation.
+DON'T give the impression list. After the medical record, give the list of things that the doctor explained to the patient during the consultation. the title should be [환자 설명 내용]
 Use Korean.
 
 [transcript]
@@ -156,8 +156,9 @@ def call_format():
 
 def advise(): 
     with st.spinner('진료 기록을 검토 및 추정진단을 뽑고 있습니다...'):
-        output = medical_advisor(st.session_state.temp_medical_record_2,st.session_state.transcript)
-    st.session_state.temp_medical_record_2 += '\n\n'+ output
+        output = medical_advisor(st.session_state.temp_medical_record,st.session_state.transcript)
+    #print(output)
+    st.session_state.temp_medical_record += '\n\n'+ output
     st.success("진료 내용 검토 성공적으로 완료 되었습니다.")
 
 def medical_advisor(medical_record, transcript):
@@ -217,7 +218,7 @@ if st.session_state.recordings and len(st.session_state.audio)>100:
     player_field = st.audio(st.session_state.audio.export().read())  
     if not st.session_state.transcript_status :
         with st.spinner('음성 녹음을 받아적고 있습니다...'):
-            asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="이것은 의사와 환자의 진료 중 나눈 대화를 녹음한 것입니다.",file= NamedBytesIO(st.session_state.audio.export().read(), name="audio.wav"))
+            asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",file= NamedBytesIO(st.session_state.audio.export().read(), name="audio.wav"))
         st.session_state.transcript += '\n'+ asr_result.text 
         st.session_state.transcript_status = True
 
@@ -229,7 +230,7 @@ if st.session_state.recordings and len(st.session_state.audio)>100:
             with st.spinner('음성 녹음을 바탕으로 진료 기록을 완성하고 있습니다...'):
                 st.session_state.LLM_medrecord = chain.invoke({"transcript" : st.session_state.transcript, "incomplete_medrec" : st.session_state.temp_medical_record})
         medical_record_area.empty()
-        medical_record_area.text_area('진료 기록', value=st.session_state.LLM_medrecord , height=600, key='temp_medical_record_2')
+        medical_record_area.text_area('진료 기록', value=st.session_state.LLM_medrecord , height=600)
         
 
 #st.text_area("진료 음성기록", key='transcript')
