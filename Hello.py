@@ -196,7 +196,8 @@ class NamedBytesIO(io.BytesIO):
 
 st.selectbox("진료기록 양식", options=['없음', '기본', '어깨통증'],index=1,on_change=call_format, key='format_type')
 
-medical_record_area = st.text_area('진료 기록', value="[현병력]\n\n[ROS]", height=600, key='temp_medical_record')
+medical_record_area = st.empty()
+medical_record_area.text_area('진료 기록', value="[현병력]\n\n[ROS]", height=600, key='temp_medical_record')
 
 st.session_state.audio=audiorecorder(start_prompt="", stop_prompt="", pause_prompt="", key='recordings')
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
