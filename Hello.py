@@ -227,7 +227,7 @@ if st.session_state.recordings and len(st.session_state.audio)>100:
             with st.spinner('음성 녹음을 바탕으로 진료 기록을 완성하고 있습니다...'):
                 st.session_state.LLM_medrecord = chain.invoke({"transcript" : st.session_state.transcript, "incomplete_medrec" : st.session_state.temp_medical_record})
         medical_record_area.empty()
-        st.text_area('진료 기록', value=st.session_state.LLM_medrecord , height=600, key='temp_medical_record_2')
+        medical_record_area.text_area('진료 기록', value=st.session_state.LLM_medrecord , height=600, key='temp_medical_record_2')
         
 
 #st.text_area("진료 음성기록", key='transcript')
