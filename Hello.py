@@ -241,7 +241,7 @@ with st.sidebar:
     st.markdown("`진료기록 양식`에서 원하는 양식을 선택하거나 진료기록 텍스트 상자에 원하는 양식을 붙여넣기한다.")
     st.subheader("2.진료내용 녹음하기")
     st.markdown("`🎙️`을 눌러주고 진료를 진행한다")
-    st.subheader("3.진료 음성기록 변환하기")
+    st.subheader("3.진료 마치기")
     st.markdown("진료가 끝나면 `💾`을 누르고 음성파일이 처리되기를 기다린다.")
     st.subheader("4.진료기록 자동 완성하기")
     st.markdown("`✍🏻 진료기록 자동 완성`을 눌러 진료기록이 완성되기를 기다린다.")
