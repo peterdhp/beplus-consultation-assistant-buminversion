@@ -33,7 +33,8 @@ def refresh():
 
 
 def medical_record(transcript):
-    prompt_template = """Given the transcript, write a semi-filled medical report of the patient. Only fill in the form based on the transcript. 
+    prompt_template = """Given the transcript, write a semi-filled medical report of the patient. 
+write the medical record based ONLY on the information given. If you don't have enough information to complete the medical record, just leave it blank.
 After the medical record, give the list of things that the doctor explained to the patient during the consulaltation.
 Use Korean.
 [transcript]
