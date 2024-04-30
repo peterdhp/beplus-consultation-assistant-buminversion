@@ -33,8 +33,6 @@ def refresh():
 
 
 def medical_record(transcript):
-    """문진 내용을 기반으로 질문을 함"""
-    
     prompt_template = """Given the transcript, write a semi-filled medical report of the patient. Only fill in the form based on the transcript. 
 After the medical record, give the list of things that the doctor explained to the patient during the consulaltation.
 Use Korean.
@@ -64,8 +62,7 @@ CBC 시행
 위내시경 시행
 
 -----
-                
-                """
+"""
 
     prompt = PromptTemplate.from_template(prompt_template)
     llm = ChatOpenAI(model_name="gpt-4-turbo", temperature = 0)
@@ -77,10 +74,6 @@ CBC 시행
     return output
 
 def medical_record_voicecomplete():
-    """문진 내용을 기반으로 질문을 함"""
-    
-    
-    
     prompt_template = """Given a transcript of a patient consultation and a incomplete medical record, complete and edit the medical record. 
 Complete or edit the medical record based ONLY on the information given. For the physical examination KEEP THE FORMAT and only change what is necessary.
 DON'T give the impression list. After the medical record, give the list of things that the doctor explained to the patient during the consulaltation.
@@ -203,7 +196,7 @@ class NamedBytesIO(io.BytesIO):
 
 st.selectbox("진료기록 양식", options=['없음', '기본', '어깨통증'],index=1,on_change=call_format, key='format_type')
 
-st.text_area('진료 기록', value="[현병력]\n\n[ROS]", height=600, key='temp_medical_record')
+medical_record_area = st.text_area('진료 기록', value="[현병력]\n\n[ROS]", height=600, key='temp_medical_record')
 
 st.session_state.audio=audiorecorder(start_prompt="", stop_prompt="", pause_prompt="", key='recordings')
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -212,7 +205,7 @@ timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 thirty_minutes = 30 * 60 * 1000
 if len(st.session_state.audio)>thirty_minutes:
-    st.warning('음성 녹음은 30분을 초과할 수 없습니다. 첫 30분에 대한 진료내용만 사용합니다.')
+    st.warning('음성 녹음은 30분을 초과할 수 없습니다. 첫 30분에 대한 진료내용만 사용합니다.', icon='⚠')
     st.session_state.audio = st.session_state.audio[:thirty_minutes]
 
 
@@ -224,6 +217,7 @@ if st.session_state.recordings and len(st.session_state.audio)>100:
             asr_result = client.audio.transcriptions.create(model="whisper-1", language= "ko",prompt="이것은 의사와 환자의 진료 중 나눈 대화를 녹음한 것입니다.",file= NamedBytesIO(st.session_state.audio.export().read(), name="audio.wav"))
         st.session_state.transcript += '\n'+ asr_result.text 
         st.session_state.transcript_status = True
+
         if st.session_state.format_type == '없음' and st.session_state.temp_medical_record == "":
             with st.spinner('음성 녹음을 바탕으로 진료 기록을 완성하고 있습니다...'):
                 st.session_state.LLM_medrecord = medical_record(transcript=st.session_state.transcript)
@@ -231,8 +225,9 @@ if st.session_state.recordings and len(st.session_state.audio)>100:
             chain = medical_record_voicecomplete()
             with st.spinner('음성 녹음을 바탕으로 진료 기록을 완성하고 있습니다...'):
                 st.session_state.LLM_medrecord = chain.invoke({"transcript" : st.session_state.transcript, "incomplete_medrec" : st.session_state.temp_medical_record})
-        st.session_state.temp_medical_record = st.session_state.LLM_medrecord
-        st.experimental_rerun()
+        medical_record_area.empty()
+        st.text_area('진료 기록', value=st.session_state.LLM_medrecord , height=600, key='temp_medical_record_2')
+        
 
 #st.text_area("진료 음성기록", key='transcript')
 st.button('✍🏻 진료기록 자동 완성 ',on_click=update_text)
