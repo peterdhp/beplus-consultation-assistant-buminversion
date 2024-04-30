@@ -210,9 +210,14 @@ timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 #st.write(st.session_state)
 
+thirty_minutes = 30 * 60 * 1000
+if len(st.session_state.audio)>thirty_minutes:
+    st.warning('음성 녹음은 30분을 초과할 수 없습니다. 첫 30분에 대한 진료내용만 사용합니다.')
+    st.session_state.audio = st.session_state.audio[:thirty_minutes]
+
 
 client = OpenAI()
-if st.session_state.recordings and len(st.session_state.audio)>0.1:
+if st.session_state.recordings and len(st.session_state.audio)>100:
     player_field = st.audio(st.session_state.audio.export().read())  
     if not st.session_state.transcript_status :
         with st.spinner('음성 녹음을 받아적고 있습니다...'):
